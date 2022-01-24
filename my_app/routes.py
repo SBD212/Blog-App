@@ -1,5 +1,4 @@
-from flask import render_template, sessions, url_for, redirect, request, flash, abort
-import flask_login
+from flask import render_template, url_for, redirect, request, flash, abort
 from flask_login.utils import confirm_login, login_required
 from flask_wtf import form
 from my_app import app, db

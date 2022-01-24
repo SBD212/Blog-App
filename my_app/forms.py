@@ -1,8 +1,5 @@
-from email import message
-from email.policy import default
-from random import choices
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField, HiddenField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, HiddenField, SelectField, EmailField
 from wtforms.fields.simple import BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo,InputRequired, Length, ValidationError
 from wtforms_validators import Alpha, AlphaNumeric
@@ -10,7 +7,7 @@ from my_app.models import User
 
 class RegistrationForm(FlaskForm):
     first_name = StringField(label='first_name', validators=[InputRequired(message='First name is required'), Length(min=5,max=20), Alpha(message='First name can only contain letters')])
-    email = StringField(label='email', validators= [InputRequired('Email is required'), Email(message= 'Email is of invalid format')])
+    email = EmailField(label='email', validators= [InputRequired('Email is required'), Email(message= 'Email is of invalid format')])
     username = StringField('username', validators= [InputRequired(message = 'Please select a username'), Length(min=5,max=20)])
     password = PasswordField(label='Password', validators=[InputRequired(message='Enter a password'),Length(min=5,max=20),EqualTo('confirm_password',message='Passwords must match')])
     confirm_password = PasswordField(label='Confirm_Password')
