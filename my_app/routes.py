@@ -24,20 +24,20 @@ def register():
 
     if user:
       flash('An account with that email already exists.', 'error')
-      return redirect(url_for('login'))
+      return redirect(url_for('register'))
 
     if form.validate_on_submit():
       user = User(first_name = form.first_name.data,email=form.email.data, username=form.username.data, password=form.password.data)
       db.session.add(user)
       db.session.commit()
       login_user(user)
-      flash('Registration successful, logging you in!')
+      flash('Registration successful, you are now logged in!')
       return redirect(url_for('registered'))
     return render_template('register.html', form=form)
 
 @app.route('/register_success')
 def registered():
-    return render_template('home.html')
+    return redirect(url_for('home'))
 
 @app.route("/login",methods=['GET','POST'])
 def login():

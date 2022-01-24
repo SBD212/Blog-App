@@ -26,14 +26,20 @@
         <nav id = 'top_navig_bar'>
             <a href="{{url_for('home')}}" class = 'home_text'> <span class = 'material-icons'> home </span> </a>
             {% if current_user.is_authenticated %}
-            <p id ='pers_greet1'> Hello, {{ current_user.first_name }} </p>
+                {% if current_user.email == 'junaidawan17@gmail.com' %}
+                    <p id ='pers_greet3'> Hello, {{ current_user.first_name }} </p>
+                {% else %}
+                    <p id ='pers_greet1'> Hello, {{ current_user.first_name }} </p>
+                {% endif  %}
             {% else %}
             <p id ='pers_greet2'> Hello, Guest! </p>
             {% endif %}
             <ul>
                 <li><a href="{{url_for('register')}}"> Register </a></li>
                 {% if current_user.is_authenticated %}
-                    <li><a href="{{url_for('new_post')}}"> New Post </a></li>
+                    {% if current_user.email == 'junaidawan17@gmail.com' %}
+                        <li><a href="{{url_for('new_post')}}"> New Post </a></li>
+                    {% endif %}
                     <li><a href="{{url_for('logout')}}"> Logout </a></li>
                     {% else %}
                     <li><a href="{{url_for('login')}}"> Log in </a></li>
@@ -44,7 +50,7 @@
     </header>
 
 
-    <div>
+    <div id = 'flashes_container'>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class='flashes'>
@@ -57,7 +63,7 @@
     </div> 
     
     <div class = 'main_content'>
-        {% block content %} 
+        {% block content %}
         {% endblock %}
     </div>
         
@@ -83,6 +89,10 @@
         setTimeout(function () 
             {
                 flash_msg[0].classList.add('animate2');
+                flash_msg[0].addEventListener('animationend', function()
+                {
+                    document.getElementById('flashes_container').style.display = 'none';
+                });
             }, 4000);
     </script>
 </body>

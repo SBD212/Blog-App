@@ -9,7 +9,7 @@
 
     <div class = "login_credentials">    
       <div class = 'user'>
-        {{form.username(id = "username", placeholder = "Username")}}
+        {{form.username(id = "username", placeholder = "Username/ Email")}}
         {% for error in form.username.errors %}
         <script> document.getElementById("username").style.borderColor = "red"; </script>
           <span class = "username_error" style="color: red;"> <img src="{{ url_for('static',filename='error.jpg')}}" > {{ error }}</span>
