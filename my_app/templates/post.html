@@ -12,7 +12,7 @@
                 <p2> {{ post.date.strftime('%Y-%m-%d') }} </p2> 
             </div>
 
-                {% if post.author == current_user %}
+                {% if current_user.email == 'junaidawan17@gmail.com' %}
                 <div class = "edit_post">
                     <button type ='submit' class = 'update_btn'> <a href="{{ url_for('update_post', post_id=post.id) }}"> Update </a> </button>
                     <button class = 'delete_btn'> Delete </button>

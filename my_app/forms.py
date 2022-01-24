@@ -24,7 +24,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email is taken, please select a different one')
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators= [InputRequired(message='Username is required'), Length(min=5,max=20)])
+    email = StringField('email', validators= [InputRequired(message='Email is required'), Length(min=5,max=50)])
     password = PasswordField('Password',validators=[InputRequired(message='Password cannot be blank'), Length(min=5,max=20)])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
