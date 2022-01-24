@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href= {{ url_for('static', filename = 'style.css') }}>
+    <link rel="stylesheet" href= {{ url_for('static', filename = 'register_loginstyle.css') }}>
+    <link rel="stylesheet" href= {{ url_for('static', filename = 'newpoststyle.css') }}>
+    <link rel="stylesheet" href= {{ url_for('static', filename = 'poststyle.css') }}>
+
+    <title>My App</title>
+</head>
+
+<body>
+    <header>
+        <nav id = 'top_navig_bar'>
+            <a href="{{url_for('home')}}" class = 'home_text'> <span class = 'material-icons'> home </span> </a>
+            {% if current_user.is_authenticated %}
+            <p id ='pers_greet1'> Hello, {{ current_user.first_name }} </p>
+            {% else %}
+            <p id ='pers_greet2'> Hello, Guest! </p>
+            {% endif %}
+            <ul>
+                <li><a href="{{url_for('register')}}"> Register </a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{url_for('new_post')}}"> New Post </a></li>
+                    <li><a href="{{url_for('logout')}}"> Logout </a></li>
+                    {% else %}
+                    <li><a href="{{url_for('login')}}"> Log in </a></li>
+                {% endif %}
+                
+            </ul>
+        </nav>
+    </header>
+
+
+    <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class='flashes'>
+                {% for category, message in messages %}
+                    <li class = "{{category}}"> {{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div> 
+    
+    <div class = 'main_content'>
+        {% block content %} 
+        {% endblock %}
+    </div>
+        
+    <footer id = 'footer'>
+        <div class = 'social'>
+            <a href ='#'><i class="fab fa-instagram"></i></a>
+            <a href ='#'><i class="fab fa-twitter"></i></a>
+            <a href ='#'><i class="fab fa-facebook-f"></i></a>
+            <a href ='#'><i class="fab fa-linkedin"></i></a>
+        </div>
+        <ul>
+            <li><a href = '#'> Home </a></li>
+            <li><a href = '#'> About </a></li>
+            <li><a href = '#'> Terms of Use </a></li>
+            <li><a href = '#'> Privacy Policy </a></li>
+        </ul>
+        <p> Junaid's blog @ 2021</p>
+    </footer>
+    
+    <script>
+        flash_msg = document.getElementsByClassName('flashes');
+        flash_msg[0].classList.add('animate1');
+        setTimeout(function () 
+            {
+                flash_msg[0].classList.add('animate2');
+            }, 4000);
+    </script>
+</body>
+
+</html>

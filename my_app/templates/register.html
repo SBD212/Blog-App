@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class = "content_wrapper">
+  <div class = "form_container">
+    <h1>
+      <span>Create your account</span>
+    </h1>
+    <form method="POST" novalidate="novalidate" action="">
+    {{ form.csrf_token }}
+      <div class = "user_credentials">    
+        
+        <div class = 'form_group1'>
+          {{form.first_name (id = "first_name_new", placeholder = "First name")}}
+          {% for error in form.first_name.errors %}
+          <script> document.getElementById("first_name_new").style.borderColor = "red"; </script>
+            <span class = "error1" style="color: red;"> <img src="{{ url_for('static',filename='error.jpg')}}" > {{ error }}</span>
+          {% endfor %}
+        </div>
+        
+        <div class = 'form_group1b'>
+          {{form.email(id = "email_new", placeholder = "email@example.com")}}
+          {% for error in form.email.errors %}
+          <script> document.getElementById("email_new").style.borderColor = "red"; </script>
+            <span class = "error2" style="color: red;"> <img src="{{ url_for('static',filename='error.jpg')}}" > {{ error }}</span>
+          {% endfor %}  
+        </div>
+      </div>
+
+    
+        <div class = "form_group2">
+          {{form.username(id = "username", placeholder = "Username")}}
+        </div>
+        
+        <div class = "error3">
+          {% for error in form.username.errors %}
+          <script> 
+            document.getElementById("username").style.borderColor = "red";
+          </script>
+            <span style="color: red;"> <img src="{{ url_for('static',filename='error.jpg')}}" > {{ error }}</span>
+          {% endfor %}
+        </div>
+
+        {% if form.username.errors %}
+          <script>
+          var text1 = document.getElementsByClassName("user_helper");
+          text1.innerHTML = "{{error}}"</script>
+          {% else %}
+            <div class = "user_helper"> You can use letters, numbers and special characters</div>
+        {% endif %}
+
+      <div class = "pass_credentials">
+        <div class = "form_group3">
+          {{form.password(id = "password_new", placeholder = "Password")}}
+          {{form.confirm_password(id = "password_confirm", placeholder = "Confirm")}}
+        </div>
+      </div>
+      
+      <div class = "error4">
+        {% for error in form.password.errors %}
+        <script>
+          document.getElementById("password_new").style.borderColor = "red";
+          document.getElementById("password_confirm").style.borderColor = "red";
+        </script>
+          <span style="color: red;"> <img src="{{ url_for('static',filename='error.jpg')}}" > {{ error }}</span>
+        {% endfor %}
+      </div>
+      
+      {% if form.password.errors %}
+        <script>
+          var text2 = document.getElementsByClassName("pass_helper");
+          text2.innerHTML = "{{error}}"</script>
+      {% else %}
+        <div class = "pass_helper"> Please use between 5 to 20 characters with a mixture of letters, numbers and symbols</div>
+      {% endif %}
+      
+      <div class ="input_btn">
+        <a href="{{url_for('login')}}"> Already have an account? Log in </a>
+        <input id = "btn" type="submit" value="Register"> 
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

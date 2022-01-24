@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class = 'Sort_Posts'>
+  <form id = 'sorting_form' method = 'POST' >
+  {{ form.csrf_token }}
+    {{ form.sorted (id = 'sorting_field')}}
+  </form>
+</div>
+
+<div class = 'blog_post'>
+  {% for post in posts %}
+    <div class = 'post_container'>
+      <div class = img_post> <img src="{{ url_for('static', filename='img/' + post.author.image_file) }}"></div>
+      <div class = "post">
+        <div class = 'author_time'> 
+          <p1> {{ post.author.username }} </p1> 
+          <span> | </span>  
+          <p2> {{ post.date.strftime('%Y-%m-%d') }} </p2> 
+        </div>
+        <hr class = 'hr1'>
+
+        <div class = 'post_title'>
+          <a href="{{url_for('post', post_id=post.id)}}"> <h2> {{ post.title }} </h2> </a> 
+        </div>
+      
+        <div class = 'short_description'>
+          <p> {{ post.content }}</p>
+        </div>
+
+        <hr class = hr2>
+
+        <!-- rating and comments -->
+        <div class = 'post_feedback'>
+          <div class = 'post_rating'>
+            <span class="material-icons"> star_rate </span>
+            {% if post.avg_rating %}
+              <p> {{ post.avg_rating }} </p>
+            {% else %}
+              <p>  </p>
+            {% endif %}
+          </div>
+          
+          <div class = 'comment_text'>
+            <span class="material-icons"> comment </span>
+            <p> {{ post.comments }} </p>
+          </div>
+        </div>
+
+        <hr class = hr3>
+      </div>  
+    </div>
+  {% endfor %}
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type ="text/javascript">
+  //sorting posts in ascending/descending order
+  var sorting_posts = document.getElementById('sorting_field');
+  sorting_posts.addEventListener('change', function (event)
+  {
+    document.getElementById("sorting_form").submit();
+ });
+</script>
+{% endblock %}

@@ -1,0 +1,281 @@
+/******************************************************************* styling of register page  ***********************************************/
+
+.form_container{
+    background: #fff;
+    
+    /*border styling*/
+    border-color: #d8d2d2;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    
+    width: 550px;
+    height: 500px;
+    padding: 48px 40px 36px;
+}
+
+.form_container h1{
+    font-family: 'Noto Sans',Arial, sans-serif;
+    font-size: 28px;
+    font-weight: lighter;
+    letter-spacing: 0.25pt;
+    display: flex;
+    justify-content: center;
+}
+
+.user_credentials{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.form_group1{
+    display: flex;
+    flex-direction: column;
+    padding-top: 10%;
+}
+
+.form_group1b{
+    display: flex;
+    flex-direction: column;
+    padding-top: 10%;
+}
+
+.form_group2{
+    display: flex;
+    justify-content: center;
+}
+
+.form_group3{
+    display: flex;
+    justify-content: center;
+    padding-top: 10%;
+}
+
+#first_name_new, #email_new, #username, #password_new, #password_confirm{
+    border-color: #d8d2d2;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    height: 32px;
+    text-indent: 1em;
+}
+
+#first_name_new:focus, #email_new:focus, #username:focus, #password_new:focus, #password_confirm:focus{
+    border-color: #1a73e8;
+    border-width: 2px;
+    outline: none;
+}
+
+#email_new{
+    margin-left: 10px;
+}
+
+#username{
+    margin-top: 20px;
+    width: 50%;
+}
+
+#password_new{
+    margin-right: 10px;
+}
+
+.user_helper, .pass_helper{
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #5f6368;
+    padding-top: 4px;
+    letter-spacing: 0.05px;
+}
+
+.pass_helper{
+    padding-left: 26%;
+    padding-right: 25%;
+    
+}
+
+.input_btn{
+    display: flex;
+    justify-content: center;
+    padding-top:7%;
+}
+
+.input_btn a{
+    margin-top: 1%;
+    padding-right: 10%;
+    font-family: 'Noto Sans', sans-serif;
+    text-decoration: none;
+}
+
+#btn{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    padding: 10px 12px;
+    background-color: #1ab1d6;
+    border: none;
+    border-radius: 5px;
+    box-shadow: #5f6368;
+    transform:translateZ(50px);
+    transition: 0.5s ease-out;
+}
+
+#btn:hover{
+    cursor: pointer;
+    background-color: #1594b4;
+    transform:translateZ(100px);
+    box-shadow: 0 0.5px 6px #5F4B3BFF;
+}
+
+.error1, .error2, .error3, .error4{
+    font-size: 12px;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.form_container span{
+    display: flex;
+    flex-direction: row;
+}
+
+.error1{
+    padding-top: 2.5%;
+}
+
+.error2{
+    padding-top: 2.5%;
+    padding-left: 7%;
+}
+
+.error3{
+    padding-top: 1%;
+    padding-left: 25%;
+}
+
+.error4{
+    padding-top: 1%;
+    padding-left: 8%;
+    padding-right: 25%;
+}
+
+.form_container img{
+    width: 16px;
+    height: 16px;
+    padding-right: 2%;
+}
+
+
+/******************************************************************* styling of login page  ***********************************************/
+
+.form_container_login{
+    background: #fff;
+    
+    /*border styling*/
+    border-color: #d8d2d2;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    
+    width: 400px;
+    height: 450px;
+    padding: 48px 40px 36px;
+}
+
+.form_container_login h1{
+    font-family: 'Noto Sans',Arial, sans-serif;
+    font-size: 28px;
+    font-weight:lighter;
+    display: flex;
+    justify-content: center;
+}
+
+.form_container_login h2{
+    font-family: 'Noto Sans',Arial, sans-serif;
+    font-size: 20px;
+    font-weight:lighter;
+    display: flex;
+    justify-content: center;
+}
+
+.login_credentials{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20%;
+}
+
+#username, #password{
+    border-color: #d8d2d2;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    height: 40px;
+    width: 400px;
+    text-indent: 1em;
+}
+
+#username:focus, #password:focus{
+    border-color: #1a73e8;
+    border-width: 2px;
+    outline: none;
+}
+
+.pass{
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
+
+.checkbox{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.input_btn{
+    display: flex;
+    justify-content: center;
+    padding-top:7%;
+}
+
+.input_btn a{
+    margin-top: 2%;
+    padding-right: 10%;
+    font-family: 'Noto Sans', sans-serif;
+    text-decoration: none;
+}
+
+#btn{
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    padding: 9px 20px;
+    background-color: #1ab1d6;
+    border: none;
+    border-radius: 5px;
+    box-shadow: #5f6368;
+
+    transform:translateZ(50px);
+    transition: 0.5s ease-out;
+}
+
+#btn:hover{
+    cursor: pointer;
+    background-color: #1594b4;
+    transform:translateZ(100px);
+    box-shadow: 0 0.5px 6px #5F4B3BFF;
+}
+
+.form_container_login span{
+    display: flex;
+    flex-direction: row;
+    padding-top: 1.5%;
+}
+
+.form_container_login img{
+    width: 16px;
+    height: 16px;
+    padding-right: 1%;
+}

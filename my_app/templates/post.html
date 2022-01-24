@@ -1,0 +1,335 @@
+{% extends 'layout.html' %}
+{% block content %}
+    {{ moment.include_moment() }}
+
+<div class = 'post_container'>
+    <div class = img_post> <img src="{{ url_for('static', filename='img/' + post.author.image_file) }}"></div>
+    <div class = "post">
+        <div class = 'top_section'>
+            <div class = 'author_time'> 
+                <p1> {{ post.author.username }} </p1> 
+                <span> | </span>  
+                <p2> {{ post.date.strftime('%Y-%m-%d') }} </p2> 
+            </div>
+
+                {% if post.author == current_user %}
+                <div class = "edit_post">
+                    <button type ='submit' class = 'update_btn'> <a href="{{ url_for('update_post', post_id=post.id) }}"> Update </a> </button>
+                    <button class = 'delete_btn'> Delete </button>
+                </div>
+                {% endif %}
+        </div>
+            <hr class = hr1>
+
+        <div class = 'post_title'>
+            {% if url_for('post', post_id=post.id) %}
+                <h2> {{ post.title }} </h2>
+            {% else %}
+                <a href="{{url_for('post', post_id=post.id)}}"> <h2> {{ post.title }} </h2> </a>
+            {% endif %}
+        </div>
+        
+        <div class = 'detailed_description'>
+            <p> {{ post.content }}</p>
+        </div>
+
+        <!-- Joining button -->
+        {% if not current_user.is_authenticated %}
+            <div class = 'register_login_link'>
+                <a href="{{url_for('register')}}" type="button"> Register/Login to rate or comment </a>
+            </div>
+        {% endif %}
+
+        <!-- rating and comments counters-->
+        <div class = 'post_feedback_indl_post'>
+            <div class = 'post_rating_indl_post'>
+                {% if has_rated %}
+                    <span id = 'rating_count_colored' class="material-icons"> star_rate </span>
+                {% else %}
+                    <span id = 'rating_count_uncolored' class="material-icons"> star_rate </span>
+                {% endif %}
+                {% if post.avg_rating %}
+                    <p> {{ post.avg_rating }} </p>
+                {% else %}
+                    <p>  </p>
+                {% endif %}
+            </div>
+            
+            <div class = 'comment_text_indl_post'>
+                <span class="material-icons"> comment </span>
+                    <p> {{ post.comments }} </p>
+            </div>
+        </div>
+
+    <!-- rate and comment buttons -->
+    {% if current_user.is_authenticated %}
+    <hr class = hr2>
+        <div class = 'rate_and_comment_btns'>
+            {% if has_rated %}
+                <div class = 'rate_btn_feedback'>
+                    <form id = 'rating_submit_id' method="POST" >
+                        {{ form_rating.csrf_token }}
+                            <div class = 'stars_container_feedback'>
+                                <div onclick='rate(event)' class = 'stars_feedback'>
+                                    <span id= '1' class="material-icons"> star_border </span>
+                                    <span id= '2' class="material-icons"> star_border </span>
+                                    <span id= '3' class="material-icons"> star_border </span>
+                                    <span id= '4' class="material-icons"> star_border </span>
+                                    <span id= '5' class="material-icons"> star_border </span>
+                                </div>
+                            </div>
+                        {{ form_rating.rate(id = 'rating_field', value = '') }}
+                        </form>
+                </div>
+                <div onclick='show_comments()' class = 'comment_btn_feedback'>
+                    <a href="#"> Comment </a>
+                </div>
+           {% else %}
+                <div onmouseenter = 'show_rating()' onmouseleave= 'hide_rating()' class = 'rate_btn'>
+                    <a href="#"> Rate </a>
+                </div>
+                <div onclick='show_comments()' class = 'comment_btn'>
+                    <a href="#"> Comment </a>
+                </div>
+            {% endif %}
+        </div>
+    <hr class = hr3>
+    {% endif %}
+
+        
+    
+    <!-- rating section -->
+    <div id = 'rating_section_id' class = 'rating_section'>
+        <form id = 'rating_submit_id' method="POST" >
+        {{ form_rating.csrf_token }}
+            <div class = 'stars_container'>
+                <div onclick='rate(event)' class = 'stars'>
+                    <span id= '1' class="material-icons"> star_border </span>
+                    <span id= '2' class="material-icons"> star_border </span>
+                    <span id= '3' class="material-icons"> star_border </span>
+                    <span id= '4' class="material-icons"> star_border </span>
+                    <span id= '5' class="material-icons"> star_border </span>
+                </div>
+            </div>
+        {{ form_rating.rate(id = 'rating_field', value = '') }}
+        </form>
+    </div>
+    
+    <!-- comment section -->
+        <div id = 'comment_section_id' class = "comment_section"> 
+            <form id = 'comment_form' method="POST">
+            {{ form_comment.csrf_token }}
+                {{ form_comment.body(id = "comment_field", placeholder = "Comment here") }}
+                {{ form_comment.author (id = "comment_author") }}
+            </form>
+            
+            <div class = "post_comments_container" >
+                {% for comment in comments %}
+                
+                <div class = 'individual_comment_container'>
+                    <div class = 'individual_comments'>
+                        <div class = 'individual_comments_time'> <h3> {{ comment.author }} </h3> <span> {{ moment(comment.timestamp).fromNow() }} </span> </div>
+                        <p> {{ comment.body }} </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>  
+  </div>
+
+  <!-- modal -->
+  <div class = 'modal_container'>
+      <div class = 'modal'>
+          <div class= "top_section_modal"> 
+              <h1> Confirm deletion? </h1>
+              <button class = 'close_btn' type='button'> 
+                  <span class = 'material-icons'> close</span>
+              </button>
+          </div>
+          
+          <div class = 'modal_content'> 
+            <p>
+                Are you sure you want to delete your post?
+            </p>
+          </div>
+          
+          <div class ="bot_section_modal">
+            <form action="{{ url_for('delete_post', post_id=post.id) }}" method= 'POST'>
+                <input class= 'modal_delete_btn' type='submit' value= 'Confirm'>
+              </form> 
+          </div>
+      </div>
+  </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).on('submit','#comment_form',function (e)
+        {
+            document.getElementById('comment_author').value = '{{ current_user.first_name }}';
+            console.log('hello');
+            req = $.ajax ({
+                type:'POST',
+                url:'/post/2',
+                data:{ comment_field:$('#comment_field').val(), author_field:$('#author_field').val() },
+            })
+
+            req.done(function(data)
+            {
+                $('#comment_section_id').html(data);
+            }
+            )
+       });
+
+      window.onload = function () 
+      {
+        document.getElementById('rating_section_id').style.display = 'none';
+    
+        var stars_feedback = document.getElementsByClassName('stars_feedback');
+        for (let i = 0; i < '{{ previous_rating.score }}'; i++) 
+        {
+            stars_feedback[0].children[i].style.color = '#d4c814';
+        }
+     }
+
+      //showing comments
+      function show_comments() 
+      {
+        document.getElementById('comment_section_id').style.display = 'block';
+      }
+
+      //showing rating
+      function show_rating()
+      {
+        var stars = document.getElementsByClassName('stars_container');
+        if (document.getElementById('rating_section_id').style.display == 'none')
+            {
+                setTimeout(function () 
+                    {
+                        stars[0].classList.add('animate1');
+                        document.getElementById('rating_section_id').style.display = 'block';
+        
+                    }, 2000);
+            }
+        }
+
+      //hiding rating
+      function hide_rating()
+      {
+        var rating_hide = document.getElementsByClassName('stars_container');
+        rating_hide[0].classList.remove('animate1');
+            
+        rating_hide[0].addEventListener('mouseleave', function()
+        {
+            setTimeout(function () 
+            {
+                document.getElementById('rating_section_id').style.display = 'none';
+            }, 2000);
+        },);
+    }
+
+      //assigning rating
+      function rate(e)
+      {
+          for (let i = 1; i <= 5; i++) 
+          {
+            if (e.target.id == i){
+                document.getElementById('rating_field').value = i;
+                document.getElementById('rating_submit_id').submit();
+            }
+          } 
+      }
+
+      //highlighting stars
+      var highlight_stars = document.querySelectorAll('.stars, .stars_feedback');
+      highlight_stars.forEach(function(elem) {
+          elem.addEventListener('mouseover',function()
+      {
+        var star_number = event.target.id;
+        if (star_number == '1')
+            {
+                elem.children[0].classList.add('changecolor');
+                for (let i = 1; i < 5; i++) 
+                {
+                    elem.children[i].classList.remove('changecolor');
+                }
+            }
+
+        else if (star_number == '2')
+        {
+            for (let i = 0; i < 2; i++) 
+            {
+                elem.children[i].classList.add('changecolor');
+            }
+
+            for (let i = 2; i < 5; i++) 
+            {
+                elem.children[i].classList.remove('changecolor');
+            }
+        
+        }
+
+        else if (star_number == '3')
+        {
+            for (let i = 0; i < 3; i++) 
+            {
+                elem.children[i].classList.add('changecolor');
+            }
+
+            for (let i = 3; i < 5; i++) 
+            {
+                elem.children[i].classList.remove('changecolor');
+            }
+        }
+
+        else if (star_number == '4')
+        {
+            for (let i = 0; i < 4; i++) 
+            {
+                elem.children[i].classList.add('changecolor');
+            }
+            elem.children[4].classList.remove('changecolor');
+        }
+
+        else if (star_number == '5')
+        {
+            for (let i = 0; i < 5; i++) 
+            {
+                elem.children[i].classList.add('changecolor');
+            }
+        }
+        
+        }
+      );
+    });
+    
+    //unhighlighting stars
+    var unhighlight_stars = document.getElementsByClassName('stars_feedback');
+    unhighlight_stars[0].addEventListener('mouseleave',function()
+      {
+        for (let i = '{{ previous_rating.score }}'; i < 5; i++) 
+            {
+                unhighlight_stars[0].children[i].classList.remove('changecolor');
+            }
+      });
+
+    unhighlight_stars[0].addEventListener('mouseover',function()
+      {
+            unhighlight_stars[0].children.style.color = '#585757';
+      });
+
+      //modal showing
+      var open = document.getElementsByClassName('delete_btn'); 
+      var modal_container = document.getElementsByClassName('modal_container');
+      var close = document.getElementsByClassName('close_btn');
+
+      open[0].addEventListener('click', ()=> {
+        modal_container[0].classList.add('show');
+      });
+
+      close[0].addEventListener('click', ()=> {
+        modal_container[0].classList.remove('show');
+      });
+  </script>
+
+{% endblock %}
