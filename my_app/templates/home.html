@@ -1,9 +1,10 @@
+<title>Home/ SBD212</title>
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class = 'Sort_Posts' style ='margin-left: 365px; padding-bottom: 15px; font-family: Roboto, sans-serif;'>
+<div class = 'Sort_Posts' style ='margin-left: 365px; padding-bottom: 15px; padding-top:35px; font-family: Roboto, sans-serif;'>
   <form id = 'sorting_form' method = 'POST'>
-    <span id = 'Sort' > Sort Posts by date </span>
+    <span id = 'Sort' > Sort posts by date </span>
     {{ form.csrf_token }}
       {{ form.sorted (id = 'sorting_field', style = 'font-family: Roboto, sans-serif')}}
   </form>
@@ -26,7 +27,12 @@
         </div>
       
         <div class = 'short_description'>
-          <p> {{ post.content }}</p>
+          <p id = 'post_short_description'> {{ post.content }}</p>
+        </div>
+        
+
+        <div class = 'full_post_redirect'>
+          <a href="{{url_for('post', post_id=post.id)}}"> Continue reading  </a> 
         </div>
 
         <hr class = hr2>
@@ -55,11 +61,20 @@
 </div>
 
 <script type ="text/javascript">
+  
+    //trim text of posts displayed 
+    var text = document.querySelectorAll("div.short_description > p");
+    text.forEach(function(elem) {
+      text = elem.innerText.substring(0,180) + '...';
+      elem.innerText = text;
+    });
+    
   //sorting posts in ascending/descending order
   var sorting_posts = document.getElementById('sorting_field');
   sorting_posts.addEventListener('change', function (event)
   {
     document.getElementById("sorting_form").submit();
- });
+  });
+
 </script>
 {% endblock %}

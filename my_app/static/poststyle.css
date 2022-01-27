@@ -1,5 +1,5 @@
 
-.post_container{
+.post_container,.post_container_detail_view{
     background: #fff;
     
     /*border styling*/
@@ -10,15 +10,25 @@
     
     display: flex;
     flex-direction: row;
-    padding-right: 12px;
+    padding-right: 25px;
     padding-left: 5px;
     padding-top: 5px;
+    margin-bottom: 50px;
+
+    width: 600px;
+}
+
+.post_container_detail_view{
+    
+    padding-top: 5px;
     margin-bottom: 25px;
+    margin-top: 50px;
+    width: 1200px;
 }
 
 .top_section{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding-bottom: 5px;
 }
 
@@ -32,6 +42,11 @@
     padding-top: 2px;
 }
 
+.author_time_detail_view{
+    font-family: 'Montserrat', sans-serif;
+    padding-bottom: 20px;
+}
+
 .author_time p1{
     color: royalblue;
 }
@@ -41,8 +56,7 @@
     line-height: 1.5;
 }
 
-.edit_post a:visited{
-    text-decoration: none;
+.edit_post a{
     color: #fff;
 }
 
@@ -103,10 +117,23 @@
    border-color: rgba(255, 255, 255, 0.829);
 }
 
-.post_title h2{
+.hr1_detail{
+    width: 1100px;
+    border-color: rgba(255, 255, 255, 0.829);
+}
+
+.post_title h2,.post_title_detail_view h2{
     font-family: 'Montserrat', sans-serif;
     padding-top: 1%;
     padding-bottom: 2%;
+}
+
+.post_title_detail_view h2{
+    font-size: 36px;
+}
+
+.post_title h2:hover{
+    text-decoration: underline;
 }
 
 .post_title a:visited{
@@ -114,11 +141,37 @@
     color: black;
 }
 
-
-.short_description, .detailed_description{
+.short_description{
     font-family: 'Montserrat', sans-serif;
     padding-bottom: 15px;
+    line-height: 1.5;
 }
+
+.detailed_description{
+   max-width: 1000px;
+   padding-bottom: 15px;
+}
+
+pre{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    white-space: pre-wrap !important;
+}
+
+.full_post_redirect{
+    padding-bottom: 10px;
+}
+
+.full_post_redirect a{
+    font-family: 'Montserrat', sans-serif;
+    color: gray;
+}
+
+.full_post_redirect:hover{
+    text-decoration: underline;
+}
+
 
 .post_feedback{
     color: #585757;
@@ -132,6 +185,7 @@
     display: flex;
     justify-content: space-between;
     padding-bottom: 5px;
+    padding-top: 50px;
 }
 
 .post_rating{
@@ -206,7 +260,7 @@
     padding-bottom: 5px;
 }
 
-.rate_and_comment_btns a{
+.rate_and_comment_btns p{
     color: #585757;
 }
 
@@ -264,21 +318,34 @@
     border-color: rgba(255, 255, 255, 0.829);
  }
 
+ .hr2_detail{
+    width: 1100px;
+    border-color: rgba(255, 255, 255, 0.829);
+ }
+
  .hr3{
     width: 500px;
     border-color: rgba(255, 255, 255, 0.829);
     margin-bottom: 2%;
  }
 
+ .hr3_detail{
+    width: 1100px;
+    border-color: rgba(255, 255, 255, 0.829);
+    margin-bottom: 2%;
+ }
+
 #comment_field{
-    width: 100%;
+    width: 90%;
     border-radius: 10px;
     border-color: #d8d2d2;
     border-style: solid;
     border-width: 2px;
     text-indent: 5pt;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 65px;
+    margin-bottom: 10px;
 }
 
 #comment_field:focus{
@@ -295,17 +362,17 @@
 
 .stars_container{
     display: flex;
-    padding-left: 20px;
-    transform: translateY(-90px);
+    padding-left: 165px;
+    transform: translateY(-110px);
 }
 
 .stars_container_feedback{
     display: flex;
-    padding-left: 20px;
+    padding-left: 165px;
 }
 
 .stars_container.animate1{
-    transform: translateY(-90px);
+    transform: translateY(-110px);
 	animation-name: movetop;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-out;
@@ -314,28 +381,16 @@
 
 @keyframes movetop {
     0% {
-        transform: translateY(-75px);
+        transform: translateY(-85px);
     }
     100% {
-        transform: translateY(-90px);
+        transform: translateY(-110px);
     }
 }
 
-.stars{
+.stars span, .stars_feedback span{
+    font-size: 28pt;
     color: #585757;
-    background: #fff;
-}
-
-.stars_feedback{
-    color: #585757;
-}
-
-.stars span{
-    font-size: 24pt;
-}
-
-.stars_feedback span{
-    font-size: 24pt;
 }
 
 .stars:hover{
@@ -359,16 +414,28 @@
     right: 60px;
 }
 
+
+.post_comments_container{
+    display: flex;
+    flex-direction: column;
+    width: 70vw;
+    
+}
+
+.post_comments_container h2{
+    color: #585757;
+    margin: 25px 0 20px;
+}
+
 .individual_comment_container{
+    font-family: 'Montserrat', sans-serif;
     padding-top: 5px;
-    padding-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .individual_comments{
-    font-family: 'Montserrat', sans-serif;
     border-color: #e1e2e4;
-    padding-top: 5px;
-    padding-bottom: 8px;
+    padding: 22px 25px;
     border-style: solid;
     border-radius: 7px;
     border-width: 1px;

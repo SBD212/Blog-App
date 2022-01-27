@@ -1,3 +1,4 @@
+<title>Create New Account</title>
 {% extends "layout.html" %}
 {% block content %}
 <div class = "content_wrapper">
@@ -5,7 +6,7 @@
     <h1>
       <span>Create your account</span>
     </h1>
-    <form method="POST" novalidate="novalidate" action="">
+    <form method="POST" novalidate="novalidate">
     {{ form.csrf_token }}
       <div class = "user_credentials">    
         

@@ -1,4 +1,4 @@
-/******************************************************************* styling of register page  ***********************************************/
+/************************************************ styling of register page  ***********************************************/
 
 .form_container{
     background: #fff;
@@ -12,6 +12,7 @@
     width: 550px;
     height: 500px;
     padding: 48px 40px 36px;
+    margin-top: 50px;
 }
 
 .form_container h1{
@@ -166,7 +167,7 @@
 }
 
 
-/******************************************************************* styling of login page  ***********************************************/
+/************************************************ styling of login page  ***********************************************/
 
 .form_container_login{
     background: #fff;
@@ -180,6 +181,7 @@
     width: 400px;
     height: 450px;
     padding: 48px 40px 36px;
+    margin-top: 50px;
 }
 
 .form_container_login h1{
@@ -278,4 +280,78 @@
     width: 16px;
     height: 16px;
     padding-right: 1%;
+}
+
+
+/************************************************ styling of contact page  ***********************************************/
+.form_container_contact{
+    background: #fff;
+    
+    /*border styling*/
+    border-color: #d8d2d2;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    
+    width: 700px;
+    height: auto;
+    padding: 75px 75px 75px 25px;
+    margin-top: 50px;
+}
+
+.name_field h3{
+    padding-right: 50px;
+    padding-top: 8px;
+}
+
+.email_field h3{
+    padding-right: 54px;
+    padding-top: 8px;
+}
+
+.body_field h3{
+    padding-right: 15px;
+    padding-top: 8px;
+}
+
+.name_field, .email_field, .body_field {
+    display: flex;
+    font-family: 'Noto Sans',Arial, sans-serif;
+    margin-left: 25px;
+    padding-top: 5px;
+}
+
+#name_contact,#email_contact{
+    width: 50%;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+}
+
+#body_contact{
+    width: 80%;
+    text-indent: 5pt;
+    padding-top: 5px;
+}
+
+
+#submit_btn_contact{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;   
+    background-color: #1ab1d6;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: #5f6368;
+    transform:translateZ(50px);
+    transition: 0.5s ease-out;
+    padding: 12px 12px;
+    margin-top: 20px;
+    margin-left: 290px;
+}
+
+#submit_btn_contact:hover{
+    cursor: pointer;
+    background-color: #1594b4;
+    transform:translateZ(100px);
+    box-shadow: 0 0.5px 6px #5F4B3BFF;
 }

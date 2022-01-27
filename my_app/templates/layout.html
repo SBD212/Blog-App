@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;900&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href= {{ url_for('static', filename = 'newpoststyle.css') }}>
     <link rel="stylesheet" href= {{ url_for('static', filename = 'poststyle.css') }}>
 
-    <title>My App</title>
+    <title>SBD212</title>
 </head>
 
 <body>
@@ -63,11 +63,24 @@
     </div> 
     
     <div class = 'main_content'>
+        <div class = 'blog_title'>
+            <h1> Junaid Awan </h1>
+            <h3> The more things change, the more they stay the same. </h3>
+        </div>
+        <hr>
         {% block content %}
         {% endblock %}
     </div>
         
     <footer id = 'footer'>
+        <div class = 'about_detail'>
+            <div class = 'mini_bio'>
+                <h2> About Junaid </h2>
+                <p> Student at Cardiff University studying MSc Computing and IT Management. I like Javascript, 
+                    love python and dream about my crypto holdings 1000x. I play League and watch Arsenal. </p>
+            </div>
+            <div class = 'img_container'> <img src="{{ url_for('static', filename='img/default.jpg') }}"> </div>
+        </div>
         <div class = 'social'>
             <a href ='#'><i class="fab fa-instagram"></i></a>
             <a href ='#'><i class="fab fa-twitter"></i></a>
@@ -76,11 +89,11 @@
         </div>
         <ul>
             <li><a href = '#'> Home </a></li>
-            <li><a href = '#'> About </a></li>
+            <li><a href = "{{ url_for('contact_author') }}"> Contact </a></li>
             <li><a href = '#'> Terms of Use </a></li>
             <li><a href = '#'> Privacy Policy </a></li>
         </ul>
-        <p> Junaid's blog @ 2021</p>
+        <p class = 'copywright_text'> Junaid's blog @ 2021. All content is the property of Junaid Awan</p>
     </footer>
     
     <script>

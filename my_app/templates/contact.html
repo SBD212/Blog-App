@@ -1,0 +1,29 @@
+<title> Contact </title>
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class = "form_container_contact">
+    <form method="POST" novalidate="novalidate" >
+        {{ form.csrf_token }}
+        <div class = 'name_field'>
+            <h3> Name: </h3>
+            {{form.name(id = "name_contact")}}
+        </div>
+
+        <div class = 'email_field'>
+            <h3> Email: </h3>
+            {{form.email(id = "email_contact")}}
+        </div>
+
+        <div class = 'body_field'>
+            <h3> Feedback: </h3>
+            {{form.body(id = "body_contact",cols="35", rows="20")}}
+        </div>
+
+        <div class = 'submit_btn_contact_class'>
+            <input id = "submit_btn_contact" type="submit" value="Submit Contact Form"> 
+        </div>
+    </form>
+</div>    
+
+{% endblock content %}

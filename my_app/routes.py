@@ -1,8 +1,8 @@
-from flask import render_template, url_for, redirect, request, flash, abort
+from flask import jsonify, render_template, url_for, redirect, request, flash, abort
 from flask_login.utils import confirm_login, login_required
 from flask_wtf import form
 from my_app import app, db
-from my_app.forms import RegistrationForm, LoginForm, PostForm, CommentForm, RatingForm, SortPostsForm
+from my_app.forms import RegistrationForm, LoginForm, PostForm, CommentForm, RatingForm, SortPostsForm, ContactForm
 from my_app.models import User, Post, Post_Comments, Rating
 from flask_login import login_user, logout_user, current_user
 
@@ -20,12 +20,6 @@ def home():
 @app.route('/register', methods=['GET','POST'])
 def register():
     form = RegistrationForm()
-    user = User.query.filter_by(email = form.email.data).first()
-
-    if user:
-      flash('An account with that email already exists.', 'error')
-      return redirect(url_for('register'))
-
     if form.validate_on_submit():
       user = User(first_name = form.first_name.data,email=form.email.data, username=form.username.data, password=form.password.data)
       db.session.add(user)
@@ -48,6 +42,8 @@ def login():
       login_user(user)
       flash('You\'ve successfully logged in,'+' '+ current_user.username +'!','message')
       return redirect(url_for('home'))
+    else:
+      flash('Incorrect email or/and password, please try again','error')
   return render_template('login.html', form=form)
 
 
@@ -63,40 +59,54 @@ def new_post():
     return redirect(url_for('home'))
   return render_template('create_post.html', title='New Post', form=form, legend='New Post')
 
-@app.route('/post/<int:post_id>', methods=["GET", "POST"])
+@app.route('/post/<int:post_id>', methods=["GET"])
 def post(post_id):
   post = Post.query.get_or_404(post_id)
   comments = Post_Comments.query.filter_by(post_id=post.id ).all()
 
+  if current_user.is_authenticated:
+    return render_template('post.html', title=post.title, post=post, form_comment = CommentForm(), form_rating = RatingForm(), comments=comments, has_rated = current_user.has_rated_post(post), 
+    previous_rating = current_user.get_user_rating_for_post(post))
+  
+  else:
+    return render_template('post.html', title=post.title, post=post, form_comment = CommentForm(), form_rating = RatingForm(), comments=comments, previous_rating = 0)
+
+#updating comment section
+@app.route('/newcomment', methods = ['POST'])
+def update_comments():
+  post_id= request.form['post_id']
+  post = Post.query.get(post_id)
+  
+  form_comment = CommentForm()
+  
+  form_comment = Post_Comments(body=request.form['comment_body'], author = request.form['comment_author'], post_id= post_id)
+  db.session.add(form_comment)
+  post.comments = post.comments + 1
+  db.session.commit()
+  comments = Post_Comments.query.filter_by(post_id=post.id ).all()
+
+  return render_template('comment_section.html', comments = comments)
+
+#updating ratings section
+@app.route('/newrating', methods = ['POST'])
+def update_ratings():
+  post_id= request.form['post_id']
+  post = Post.query.get(post_id)
+  
   form_rating = RatingForm()
-  if form_rating.validate_on_submit():
-    form_rating = Rating(score=form_rating.rate.data, user_id=current_user.id, post_id=post.id)
-    if current_user.has_rated_post(post):
+  
+  form_rating = Rating(score=request.form['score'], user_id = request.form['rating_author'], post_id= post_id)
+  if current_user.has_rated_post(post):
       previous_rating = current_user.get_user_rating_for_post(post)
       db.session.delete(previous_rating)
       db.session.commit()
 
-    db.session.add(form_rating)
-    post.get_avg_rating()
-    db.session.commit()
-    flash('Your rating has been created!','message')
-    return redirect(request.referrer)
+  db.session.add(form_rating)
+  post.get_avg_rating()
+  db.session.commit()
+  new_rating = current_user.get_user_rating_for_post(post)
 
-  form_comment = CommentForm()
-  if form_comment.validate_on_submit():
-    form_comment = Post_Comments(body=form_comment.body.data, author = form_comment.author.data, post_id=post.id)
-    db.session.add(form_comment)
-    post.comments = post.comments + 1
-    db.session.commit()
-    flash('Your comment has been created!','message')
-    return redirect(request.referrer)
-  
-  if current_user.is_authenticated:
-    return render_template('post.html', title=post.title, post=post, form_comment = form_comment, form_rating = form_rating, comments=comments, has_rated = current_user.has_rated_post(post), 
-    previous_rating = current_user.get_user_rating_for_post(post))
-  
-  else:
-    return render_template('post.html', title=post.title, post=post, form_comment = form_comment, form_rating = form_rating, comments=comments, previous_rating = 0)
+  return {'html_part': render_template('rating_section.html'), 'avg_rating': post.avg_rating, 'new_rating': new_rating.score}
 
 
 @app.route('/post/<int:post_id>/update', methods = ['GET', 'POST'])
@@ -137,3 +147,12 @@ def logout():
     flash('You\'ve successfully logged out,'+' '+ current_user.username +'!','message')
   logout_user()
   return redirect(url_for('home'))
+
+@app.route('/Contact',methods = ['GET', 'POST'])
+def contact_author():
+  form = ContactForm()
+  if form.validate_on_submit():
+    flash('Your message has been sent successfully'+' '+ current_user.first_name +'!','message')
+    return redirect(url_for('home'))
+
+  return render_template('contact.html',form = form)

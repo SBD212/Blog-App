@@ -1,17 +1,12 @@
+<title> {{ post.title }} </title>
 {% extends 'layout.html' %}
 {% block content %}
     {{ moment.include_moment() }}
 
-<div class = 'post_container'>
+<div class = 'post_container_detail_view'>
     <div class = img_post> <img src="{{ url_for('static', filename='img/' + post.author.image_file) }}"></div>
     <div class = "post">
         <div class = 'top_section'>
-            <div class = 'author_time'> 
-                <p1> {{ post.author.username }} </p1> 
-                <span> | </span>  
-                <p2> {{ post.date.strftime('%Y-%m-%d') }} </p2> 
-            </div>
-
                 {% if current_user.email == 'junaidawan17@gmail.com' %}
                 <div class = "edit_post">
                     <button type ='submit' class = 'update_btn'> <a href="{{ url_for('update_post', post_id=post.id) }}"> Update </a> </button>
@@ -19,24 +14,31 @@
                 </div>
                 {% endif %}
         </div>
-            <hr class = hr1>
 
-        <div class = 'post_title'>
+        {% if current_user.email == 'junaidawan17@gmail.com' %}
+            <hr class = hr1_detail>
+        {% endif %}
+        
+        <div class = 'post_title_detail_view'>
             {% if url_for('post', post_id=post.id) %}
                 <h2> {{ post.title }} </h2>
             {% else %}
                 <a href="{{url_for('post', post_id=post.id)}}"> <h2> {{ post.title }} </h2> </a>
             {% endif %}
         </div>
+
+        <div class = 'author_time_detail_view'> 
+            <p> By {{ post.author.username }} on {{ post.date.strftime('%Y-%m-%d') }} </p>  
+        </div>
         
         <div class = 'detailed_description'>
-            <p> {{ post.content }}</p>
+            <p> <pre> {{ post.content }} </pre> </p>
         </div>
 
         <!-- Joining button -->
         {% if not current_user.is_authenticated %}
             <div class = 'register_login_link'>
-                <a href="{{url_for('register')}}" type="button"> Register/Login to rate or comment </a>
+                <a href="{{url_for('login')}}" type="button"> Please login to rate or comment </a>
             </div>
         {% endif %}
 
@@ -49,7 +51,7 @@
                     <span id = 'rating_count_uncolored' class="material-icons"> star_rate </span>
                 {% endif %}
                 {% if post.avg_rating %}
-                    <p> {{ post.avg_rating }} </p>
+                    <p id = 'average_post_rating'> {{ post.avg_rating }} </p>
                 {% else %}
                     <p>  </p>
                 {% endif %}
@@ -57,13 +59,13 @@
             
             <div class = 'comment_text_indl_post'>
                 <span class="material-icons"> comment </span>
-                    <p> {{ post.comments }} </p>
+                    <p id = 'no_of_comments'> {{ post.comments }} </p>
             </div>
         </div>
 
     <!-- rate and comment buttons -->
     {% if current_user.is_authenticated %}
-    <hr class = hr2>
+    <hr class = hr2_detail>
         <div class = 'rate_and_comment_btns'>
             {% if has_rated %}
                 <div class = 'rate_btn_feedback'>
@@ -78,22 +80,22 @@
                                     <span id= '5' class="material-icons"> star_border </span>
                                 </div>
                             </div>
-                        {{ form_rating.rate(id = 'rating_field', value = '') }}
+                        {{ form_rating.rate(id = 'rating_field') }}
                         </form>
                 </div>
                 <div onclick='show_comments()' class = 'comment_btn_feedback'>
-                    <a href="#"> Comment </a>
+                    <p> Comment </p>
                 </div>
            {% else %}
-                <div onmouseenter = 'show_rating()' onmouseleave= 'hide_rating()' class = 'rate_btn'>
-                    <a href="#"> Rate </a>
+                <div onclick = 'show_rating()' class = 'rate_btn'>
+                    <p> Rate </p>
                 </div>
                 <div onclick='show_comments()' class = 'comment_btn'>
-                    <a href="#"> Comment </a>
+                    <p> Comment </p>
                 </div>
             {% endif %}
         </div>
-    <hr class = hr3>
+    <hr class = hr3_detail>
     {% endif %}
 
         
@@ -111,32 +113,34 @@
                     <span id= '5' class="material-icons"> star_border </span>
                 </div>
             </div>
-        {{ form_rating.rate(id = 'rating_field', value = '') }}
+        {{ form_rating.rate(id = 'rating_field') }}
         </form>
     </div>
     
-    <!-- comment section -->
+    <!-- comment form -->
         <div id = 'comment_section_id' class = "comment_section"> 
-            <form id = 'comment_form' method="POST">
+            <form id = 'comment_form' method="POST" onkeydown="return event.key != 'Enter';">
             {{ form_comment.csrf_token }}
                 {{ form_comment.body(id = "comment_field", placeholder = "Comment here") }}
                 {{ form_comment.author (id = "comment_author") }}
             </form>
-            
-            <div class = "post_comments_container" >
-                {% for comment in comments %}
-                
-                <div class = 'individual_comment_container'>
-                    <div class = 'individual_comments'>
-                        <div class = 'individual_comments_time'> <h3> {{ comment.author }} </h3> <span> {{ moment(comment.timestamp).fromNow() }} </span> </div>
-                        <p> {{ comment.body }} </p>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
         </div>
     </div>  
   </div>
+
+  <!-- comment section  -->
+  <div class = "post_comments_container" >
+    <h2> Comments </h2>
+    {% for comment in comments|sort(attribute='timestamp', reverse = True) %}
+    
+    <div class = 'individual_comment_container'>
+        <div class = 'individual_comments'>
+            <div class = 'individual_comments_time'> <h3> {{ comment.author }} </h3> <span> {{ moment(comment.timestamp).fromNow() }} </span> </div>
+            <p> {{ comment.body }} </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
   <!-- modal -->
   <div class = 'modal_container'>
@@ -164,33 +168,72 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript">
-      $(document).on('submit','#comment_form',function (e)
-        {
-            document.getElementById('comment_author').value = '{{ current_user.first_name }}';
-            console.log('hello');
-            req = $.ajax ({
-                type:'POST',
-                url:'/post/2',
-                data:{ comment_field:$('#comment_field').val(), author_field:$('#author_field').val() },
-            })
+    
+    var newRating;
 
-            req.done(function(data)
-            {
-                $('#comment_section_id').html(data);
-            }
-            )
-       });
-
-      window.onload = function () 
+    window.onload = function () 
       {
+        newRating = '{{ previous_rating.score }}';
         document.getElementById('rating_section_id').style.display = 'none';
     
         var stars_feedback = document.getElementsByClassName('stars_feedback');
         for (let i = 0; i < '{{ previous_rating.score }}'; i++) 
         {
-            stars_feedback[0].children[i].style.color = '#d4c814';
+            stars_feedback[0].children[i].classList.add('changecolor');
         }
      }
+
+    // updating comment section
+       document.getElementById('comment_form').addEventListener('keydown', function(event) 
+        {  
+            if ( event.key == 'Enter')
+            {
+                if ($('#comment_field').val().length != 0)
+                {
+                    var comments = parseInt('{{ post.comments }}');
+                    req = $.ajax({
+                        url:'/newcomment',
+                        type:'POST',
+                        data:{ comment_body : $('#comment_field').val(), comment_author: '{{ current_user.first_name }}', post_id : '{{ post.id }}' }
+                    }); 
+
+                    req.done(function(data) {
+                        $('#comment_field').val('')
+                        $('#no_of_comments').text(comments + 1);
+                        $('.post_comments_container').replaceWith(data);
+                        flask_moment_render_all();
+                    });
+                }
+        }
+       });
+
+    //assigning rating
+      function rate(e)
+      {
+          for (let i = 1; i <= 5; i++) 
+          {
+            if (e.target.id == i){
+                var score = $('#rating_field').val()
+                score = i
+                req = $.ajax({
+                        url:'/newrating',
+                        type:'POST',
+                        data:{ score : score, rating_author: '{{ current_user.id}}', post_id : '{{ post.id }}' }
+                    });
+                
+                req.done(function(data) {
+                    //$('.stars_container_feedback').replaceWith(data.html_part);
+                    $('#average_post_rating').text (data.avg_rating);
+                    newRating = data.avg_rating;
+                    var stars = $('.stars_feedback').children();
+                    for (let i = 0; i < data.new_rating; i++) 
+                    {
+                        stars[i].classList.add('changecolor');
+                    }
+                });
+            }
+          } 
+      }
 
       //showing comments
       function show_comments() 
@@ -198,7 +241,7 @@
         document.getElementById('comment_section_id').style.display = 'block';
       }
 
-      //showing rating
+      //showing rating option
       function show_rating()
       {
         var stars = document.getElementsByClassName('stars_container');
@@ -213,123 +256,105 @@
             }
         }
 
-      //hiding rating
-      function hide_rating()
-      {
-        var rating_hide = document.getElementsByClassName('stars_container');
-        rating_hide[0].classList.remove('animate1');
-            
-        rating_hide[0].addEventListener('mouseleave', function()
-        {
-            setTimeout(function () 
-            {
-                document.getElementById('rating_section_id').style.display = 'none';
-            }, 2000);
-        },);
-    }
-
-      //assigning rating
-      function rate(e)
-      {
-          for (let i = 1; i <= 5; i++) 
-          {
-            if (e.target.id == i){
-                document.getElementById('rating_field').value = i;
-                document.getElementById('rating_submit_id').submit();
-            }
-          } 
-      }
-
       //highlighting stars
-      var highlight_stars = document.querySelectorAll('.stars, .stars_feedback');
-      highlight_stars.forEach(function(elem) {
-          elem.addEventListener('mouseover',function()
+      $(document).on('mouseover','.stars_feedback, .stars',function()
       {
-        var star_number = event.target.id;
-        if (star_number == '1')
-            {
-                elem.children[0].classList.add('changecolor');
-                for (let i = 1; i < 5; i++) 
+        var array = document.querySelectorAll(".stars,.stars_feedback");
+        array.forEach(elem => {
+            var star_number = event.target.id;
+                    if (star_number == '1')
+                        {
+                            elem.children[0].classList.add('changecolor');
+                            for (let i = 1; i < 5; i++) 
+                            {
+                                elem.children[i].classList.remove('changecolor');
+                            }
+                        }
+
+                    else if (star_number == '2')
+                    {
+                        for (let i = 0; i < 2; i++) 
+                        {
+                            elem.children[i].classList.add('changecolor');
+                        }
+
+                        for (let i = 2; i < 5; i++) 
+                        {
+                            elem.children[i].classList.remove('changecolor');
+                        }
+                    
+                    }
+
+                    else if (star_number == '3')
+                    {
+                        for (let i = 0; i < 3; i++) 
+                        {
+                            elem.children[i].classList.add('changecolor');
+                        }
+
+                        for (let i = 3; i < 5; i++) 
+                        {
+                            elem.children[i].classList.remove('changecolor');
+                        }
+                    }
+
+                    else if (star_number == '4')
+                    {
+                        for (let i = 0; i < 4; i++) 
+                        {
+                            elem.children[i].classList.add('changecolor');
+                        }
+                        elem.children[4].classList.remove('changecolor');
+                    }
+
+                    else if (star_number == '5')
+                    {
+                        for (let i = 0; i < 5; i++) 
+                        {
+                            elem.children[i].classList.add('changecolor');
+                        }
+                    }
+                });
+            });
+    
+     //unhighlighting stars
+     $(document).on('mouseleave','.stars_feedback',function()
+        {
+            var unhighlight_stars = document.getElementsByClassName('stars_feedback');
+            
+                for (let i = 0; i < newRating; i++) 
+                    {
+                        unhighlight_stars[0].children[i].classList.add('changecolor');
+                    }
+
+                for (let i = newRating; i < 5; i++) 
                 {
-                    elem.children[i].classList.remove('changecolor');
-                }
-            }
-
-        else if (star_number == '2')
-        {
-            for (let i = 0; i < 2; i++) 
-            {
-                elem.children[i].classList.add('changecolor');
-            }
-
-            for (let i = 2; i < 5; i++) 
-            {
-                elem.children[i].classList.remove('changecolor');
-            }
-        
-        }
-
-        else if (star_number == '3')
-        {
-            for (let i = 0; i < 3; i++) 
-            {
-                elem.children[i].classList.add('changecolor');
-            }
-
-            for (let i = 3; i < 5; i++) 
-            {
-                elem.children[i].classList.remove('changecolor');
-            }
-        }
-
-        else if (star_number == '4')
-        {
-            for (let i = 0; i < 4; i++) 
-            {
-                elem.children[i].classList.add('changecolor');
-            }
-            elem.children[4].classList.remove('changecolor');
-        }
-
-        else if (star_number == '5')
-        {
-            for (let i = 0; i < 5; i++) 
-            {
-                elem.children[i].classList.add('changecolor');
-            }
-        }
-        
-        }
-      );
+                    unhighlight_stars[0].children[i].classList.remove('changecolor');
+                }    
+        });
+    
+    //hiding rating
+    $(document).on('mouseleave','.stars_container.animate1',function()
+    {
+        $('.stars').children().removeClass('changecolor');
+        setTimeout(function() { 
+            $('#rating_section_id').css({'display': 'none'});
+        }, 2000);
     });
     
-    //unhighlighting stars
-    var unhighlight_stars = document.getElementsByClassName('stars_feedback');
-    unhighlight_stars[0].addEventListener('mouseleave',function()
-      {
-        for (let i = '{{ previous_rating.score }}'; i < 5; i++) 
-            {
-                unhighlight_stars[0].children[i].classList.remove('changecolor');
-            }
-      });
+    //modal showing
+    var open = document.getElementsByClassName('delete_btn'); 
+    var modal_container = document.getElementsByClassName('modal_container');
+    var close = document.getElementsByClassName('close_btn');
 
-    unhighlight_stars[0].addEventListener('mouseover',function()
-      {
-            unhighlight_stars[0].children.style.color = '#585757';
-      });
+    open[0].addEventListener('click', ()=> {
+    modal_container[0].classList.add('show');
+    });
 
-      //modal showing
-      var open = document.getElementsByClassName('delete_btn'); 
-      var modal_container = document.getElementsByClassName('modal_container');
-      var close = document.getElementsByClassName('close_btn');
+    close[0].addEventListener('click', ()=> {
+    modal_container[0].classList.remove('show');
+    });
 
-      open[0].addEventListener('click', ()=> {
-        modal_container[0].classList.add('show');
-      });
-
-      close[0].addEventListener('click', ()=> {
-        modal_container[0].classList.remove('show');
-      });
   </script>
 
 {% endblock %}

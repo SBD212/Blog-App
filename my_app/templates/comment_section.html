@@ -1,0 +1,12 @@
+<div class = "post_comments_container" >
+<h2> Comments </h2>
+    {% for comment in comments|sort(attribute='timestamp', reverse = True) %}
+    
+    <div class = 'individual_comment_container'>
+        <div class = 'individual_comments'>
+            <div class = 'individual_comments_time'> <h3> {{ comment.author }} </h3> <span> {{ moment(comment.timestamp).fromNow() }} </span> </div>
+            <p> {{ comment.body }} </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
