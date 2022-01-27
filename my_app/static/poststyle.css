@@ -136,7 +136,7 @@
     text-decoration: underline;
 }
 
-.post_title a:visited{
+.post_title a{
     text-decoration: none;
     color: black;
 }
