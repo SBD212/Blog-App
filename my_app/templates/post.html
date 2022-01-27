@@ -222,7 +222,11 @@
                     });
                 
                 req.done(function(data) {
-                    //$('.stars_container_feedback').replaceWith(data.html_part);
+                    if (data.change_html == true) 
+                    {
+                        $('.stars_container.animate1').css({'display': 'none'});
+                        $('.rate_btn').replaceWith(data.html_part);
+                    }
                     $('#average_post_rating').text (data.avg_rating);
                     newRating = data.avg_rating;
                     var stars = $('.stars_feedback').children();

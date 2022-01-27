@@ -100,13 +100,18 @@ def update_ratings():
       previous_rating = current_user.get_user_rating_for_post(post)
       db.session.delete(previous_rating)
       db.session.commit()
-
-  db.session.add(form_rating)
-  post.get_avg_rating()
-  db.session.commit()
-  new_rating = current_user.get_user_rating_for_post(post)
-
-  return {'html_part': render_template('rating_section.html'), 'avg_rating': post.avg_rating, 'new_rating': new_rating.score}
+      db.session.add(form_rating)
+      post.get_avg_rating()
+      db.session.commit()
+      new_rating = current_user.get_user_rating_for_post(post)
+      return {'avg_rating': post.avg_rating, 'new_rating': new_rating.score, 'change_html':False}
+  
+  else:
+    db.session.add(form_rating)
+    post.get_avg_rating()
+    db.session.commit()
+    new_rating = current_user.get_user_rating_for_post(post)
+    return {'html_part': render_template('rating_section.html',form_rating = RatingForm()), 'avg_rating': post.avg_rating, 'new_rating': new_rating.score, 'change_html':True}
 
 
 @app.route('/post/<int:post_id>/update', methods = ['GET', 'POST'])
